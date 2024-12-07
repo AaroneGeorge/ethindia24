@@ -74,7 +74,7 @@ export default function Home() {
   }, [isLoggedIn]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center space-y-6 p-12 bg-violet-200">
+    <main className="flex min-h-screen flex-col items-center font-pixeloid space-y-6 p-12 bg-violet-200">
       <div className="text-black font-bold text-3xl mb-8">Okto SDK</div>
 
       {/* status indicator */}
@@ -87,7 +87,7 @@ export default function Home() {
 
       <div className="space-y-6 w-full max-w-lg">
         <div className="space-y-4">
-          <label className="text-black font-semibold">API Key:</label>
+          <label className="text-black font-semibold font-pixeloid">API Key:</label>
           <input
             type="text"
             value={apiKey}
