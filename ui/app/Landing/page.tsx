@@ -1,7 +1,10 @@
+"use client"
 import { Nav } from "../components/Nav"
 import { PriceCard } from "../components/PriceCard"
 import { CryptoTable } from "../components/CryptoTable"
 import React from "react"
+import { useState } from "react"
+import { ChatModal } from "../components/ChatModal"
 
 const mockChartData = Array.from({ length: 20 }, (_, i) => ({
   value: 50000 + Math.random() * 5000
@@ -17,6 +20,8 @@ const mockTableData = Array.from({ length: 6 }, () => ({
 }))
 
 export default function Home() {
+  const [isChatOpen, setIsChatOpen] = useState(false)
+
   return (
     <main className="min-h-screen">
       <Nav />
@@ -29,7 +34,10 @@ export default function Home() {
             Uniswap revain compound polkadot fantom hedera chiliz stacks audius EOS.
             Helium airweave compound ankr ethereum siacoin waves holo solana.
           </p>
-          <button className="px-6 py-3 bg-white border-2 border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">
+          <button 
+          className="px-6 py-3 bg-white border-2 border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+          onClick={() => setIsChatOpen(true)}
+>
             Mint a thing →
           </button>
         </div>
@@ -63,6 +71,7 @@ export default function Home() {
       <footer className="text-center py-8 text-gray-500">
         DGEN Design System 2024
       </footer>
+      <ChatModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </main>
   )
 }

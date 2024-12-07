@@ -1,3 +1,8 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
     font-family: 'PixeloidSans';
     src: url('/fonts/PixeloidSans.ttf') format('truetype'),
@@ -14,16 +19,37 @@
     font-style: normal;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+:root {
+  --primary: #FF1493;
+}
+
+
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+  .text-primary {
+    color: var(--primary); /* Ensure this matches your primary color variable */
+  }
 }
 
 body {
     font-family: 'PixeloidSans', sans-serif;
+}
+
+.nav-link {
+  @apply px-4 py-2 text-gray-700 hover:text-primary transition-colors;
+}
+
+.price-card {
+  @apply p-6 rounded-3xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
+}
+
+.table-header {
+  @apply px-4 py-3 text-left text-sm font-medium text-gray-500 cursor-pointer hover:text-primary;
+}
+
+.table-cell {
+  @apply px-4 py-3 text-sm;
 }

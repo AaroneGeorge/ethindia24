@@ -11,7 +11,7 @@ interface PriceCardProps {
 
 export function PriceCard({ symbol, name, price, change, data, }: PriceCardProps) {
   return (
-    <div className="price-card">
+    <div className="price-card rounded-3xl border-2 border-black p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all" >
       <div className="flex items-start justify-between mb-4">
         <div>
           <div className="text-primary font-bold">{name}</div>
