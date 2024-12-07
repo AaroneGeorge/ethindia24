@@ -41,30 +41,30 @@ async def check_health():
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
-        response = execute_pipeline(request.pipeline, request.user_query, request.history)
+        response = execute_pipeline(request.pipeline, request.user_query)
         return ChatResponse(response=response)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-def execute_pipeline(pipeline_name, user_query, history):
+def execute_pipeline(pipeline_name, user_query):
     
     if pipeline_name == "chat":
-        return entrypoint(user_query, history, pipeline_name)
+        return entrypoint(user_query, pipeline_name)
     elif pipeline_name == "function":
-        return entrypoint(user_query, history, pipeline_name)
+        return entrypoint(user_query, pipeline_name)
     else:
         raise ValueError(f"Invalid pipeline name: {pipeline_name}")
 
-# DatabaseAPI endpoint
+# Modify the add_database_entry function to handle pipeline-specific databases
 @app.post("/db/add")
-def add_database_entry(entry: DatabaseEntry):
+def add_database_entry(entry: DatabaseEntry, pipeline: Optional[str] = "default"):
     try:
         entry_id = add_to_master_db(entry.question, entry.answer)
-        update_downstream_dbs(entry.question, entry.answer, entry_id)
+        update_downstream_dbs(entry.question, entry.answer, entry_id, pipeline)
         return {"message": "Entry added successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+        
 def add_to_master_db(question, answer):
     conn = sqlite3.connect("databases/master/master.db")
     create_table_if_not_exists(conn)
@@ -88,25 +88,29 @@ def create_table_if_not_exists(conn):
     """)
     conn.commit()
 
-def update_downstream_dbs(question, answer, entry_id):
-
-    def init_vdb_items():
-
-        # have a logic where , if table/collection not exist , seed from master table
-
-        client = chromadb.PersistentClient(path="./databases/default_pipeline_vdb")
+def update_downstream_dbs(question, answer, entry_id, pipeline_name="default"):
+    def init_vdb_items(pipeline_name):
+        # Set database path based on pipeline
+        db_path = f"./databases/{pipeline_name}_vdb"
+        client = chromadb.PersistentClient(path=db_path)
         embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="BAAI/bge-large-en-v1.5")
-        collection = client.get_or_create_collection(name="default_pipeline_vdb",embedding_function=embedding_func,metadata={"hnsw:space": "cosine"})
+        # Collection name follows the same pattern
+        collection_name = f"{pipeline_name}_vdb"
+        collection = client.get_or_create_collection(
+            name=collection_name,
+            embedding_function=embedding_func,
+            metadata={"hnsw:space": "cosine"}
+        )
+        return client, embedding_func, collection
 
-        return client,embedding_func,collection
-
-    def add_qn_vdb(question,entry_id,collection,embedding_func):
-        embed_data = embedding_func( [question] )    
+    def add_qn_vdb(question, entry_id, collection, embedding_func):
+        embed_data = embedding_func([question])    
         ids_list = [entry_id]
         collection.add(
             embeddings=embed_data,
             ids=ids_list
         )
 
-    client,embedding_func,collection = init_vdb_items()
-    add_qn_vdb(question,entry_id,collection,embedding_func)
+    # Initialize and add to the appropriate database
+    client, embedding_func, collection = init_vdb_items(pipeline_name)
+    add_qn_vdb(question, entry_id, collection, embedding_func)
