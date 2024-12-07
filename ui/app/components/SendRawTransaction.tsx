@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const SendRawTransaction = ({ apiFn }: {apiFn: any}) => {
-  const [network, setNetwork] = useState<string>("SOLANA_DEVNET");
+  const network = "POLYGON_TESTNET_AMOY"
   const [instructions, setInstructions] = useState<any[]>([
     {
       keys: [

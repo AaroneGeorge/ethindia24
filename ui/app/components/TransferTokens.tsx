@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 function TransferTokens({ apiFn }) {
-  const [networkName, setNetworkName] = useState("SOLANA_DEVNET");
+  const networkName = "POLYGON_TESTNET_AMOY"
   const [tokenAddress, setTokenAddress] = useState("");
   const [quantity, setQuantity] = useState("0.001");
   const [recipientAddress, setRecipientAddress] = useState(
@@ -42,12 +42,12 @@ function TransferTokens({ apiFn }) {
   return (
     <div className="flex flex-col items-center bg-black p-6 rounded-lg shadow-lg max-w-md mx-auto">
       <h1 className="text-2xl font-bold mb-6">Transfer Tokens</h1>
-      <input
+      {/* <input
         className="w-full p-2 mb-4 border border-gray-300 rounded text-black"
         value={networkName}
         onChange={(e) => setNetworkName(e.target.value)}
         placeholder="Enter Network Name"
-      />
+      /> */}
       <input
         className="w-full p-2 mb-4 border border-gray-300 rounded text-black"
         value={tokenAddress}

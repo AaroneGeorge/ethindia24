@@ -17,14 +17,20 @@ def chat_prompt(chat, pipeline_name):
         {chat}
 
         Here are a few similar questions that might help you in answering the users questions: {similar_entries}
+
+        NOTE: 
+        1. only give the response and nothing else
+        2. give the answers in maximum 2 or 3 sentences
         """.format(chat=chat, similar_entries=similar_entries) 
     elif pipeline_name == "function":
         prompt = """
-        You are an AI Doctor able to cure any disease known to mankind. 
         Given below is the User query:
         {chat}
 
         Here are a few similar questions that might help you in answering the users questions: {similar_entries}
+
+        NOTE: 
+        1. only give the response and nothing else
         """.format(chat=chat, similar_entries=similar_entries) 
     
     return prompt
