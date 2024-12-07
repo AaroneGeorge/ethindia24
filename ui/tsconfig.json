@@ -28,6 +28,6 @@
     ".next/types/**/*.ts",
     "app/components/providers.jsx",
     "app/api/auth/[...nextauth]/route.ts"
-, "app/Landing"  ],
+, "app/landing"  ],
   "exclude": ["node_modules"]
 }

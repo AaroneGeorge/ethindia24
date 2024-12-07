@@ -11,7 +11,17 @@ import SendRawTransaction from "./components/SendRawTransaction";
 import { EmailOTPVerification } from "./components/EmailOTPVerification";
 import { PhoneOTPVerification } from "./components/PhoneOTPVerification";
 
+export const revalidate = 60 // revalidate this page every 60 seconds
+
+
+declare module "next-auth" {
+  interface Session {
+    id_token?: string; // Added id_token property
+  }
+}
+
 export default function Home() {
+  
   const { data: session } = useSession();
   const { apiKey, setApiKey, buildType, setBuildType } = useAppContext();
   const {

@@ -1,100 +1,69 @@
-// pages/landing.tsx
-import React from 'react';
-import Header from '../components/Header';
-import Head from 'next/head';
+import { Nav } from "../components/Nav"
+import { PriceCard } from "../components/PriceCard"
+import { CryptoTable } from "../components/CryptoTable"
+import React from "react"
 
-const LandingPage: React.FC = () => {
-    return (
-        <div>
-            <Header/>
-        <main>
-        <section className="bg-white py-8">
-          <div className="container mx-auto">
-            <h1 className="text-3xl font-bold text-pink-500">Hello, u degen</h1>
-            <p className="mt-4 text-gray-600">
-              Lorem ipsum dolor sit amet, adipiscing elit.
-            </p>
-            <p className="mt-4 text-gray-600">
-              Helium arweave compound ankr ethereum siacoin waves holo solana.
-              Uniswap revain compound polkadot fantom heder a chilie stacks audius EOS.
-              Helium arweave compound ankr ethereum siacoin waves holo solana.
-            </p>
-            <button className="mt-6 bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded">
-              Mint a thing
-            </button>
-          </div>
-        </section>
+const mockChartData = Array.from({ length: 20 }, (_, i) => ({
+  value: 50000 + Math.random() * 5000
+}))
 
-        <section className="bg-white py-8">
-          <div className="container mx-auto grid grid-cols-3 gap-4">
-            <div className="bg-white shadow-md rounded-md p-4">
-              <h2 className="text-2xl font-bold text-pink-500">Bitcoin BTC</h2>
-              <p className="text-gray-600 text-sm">$51,595 ▲1.13%</p>
-              <img src="/bitcoin-chart.svg" alt="Bitcoin chart" className="w-full" />
-            </div>
-            <div className="bg-white shadow-md rounded-md p-4">
-              <h2 className="text-2xl font-bold text-pink-500">Bitcoin BTC</h2>
-              <p className="text-gray-600 text-sm">$51,595 ▲1.13%</p>
-              <img src="/bitcoin-chart.svg" alt="Bitcoin chart" className="w-full" />
-            </div>
-            <div className="bg-white shadow-md rounded-md p-4">
-              <h2 className="text-2xl font-bold text-pink-500">Bitcoin BTC</h2>
-              <p className="text-gray-600 text-sm">$51,595 ▲1.13%</p>
-              <img src="/bitcoin-chart.svg" alt="Bitcoin chart" className="w-full" />
-            </div>
-          </div>
-        </section>
+const mockTableData = Array.from({ length: 6 }, () => ({
+  percent: 12.15,
+  label: "12.15",
+  coin: "WETH",
+  amount: 131189987,
+  tvl: 374973328,
+  address: "0x6b1...1d0f"
+}))
 
-        <section className="bg-white py-8">
-          <div className="container mx-auto">
-            <h2 className="text-2xl font-bold text-pink-500">Table header</h2>
-            <p className="mt-4 text-gray-600">
-              Crypto ipsum bitcoin ethereum dogecoin litecoin.
-            </p>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr>
-                    <th className="p-2 border text-left">Percent</th>
-                    <th className="p-2 border text-left">Label</th>
-                    <th className="p-2 border text-center">Coin</th>
-                    <th className="p-2 border text-center">Amount</th>
-                    <th className="p-2 border text-center">TVL</th>
-                    <th className="p-2 border text-center">Address</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="p-2 border text-center">12.15%</td>
-                    <td className="p-2 border text-center">12.15%</td>
-                    <td className="p-2 border text-center">WETH</td>
-                    <td className="p-2 border text-center">$131,189,987</td>
-                    <td className="p-2 border text-center">$374,973,328</td>
-                    <td className="p-2 border text-center">0x6b1.1d0f</td>
-                  </tr>
-                  {/* Add more table rows as needed */}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="bg-gray-800 text-white py-6">
-        <div className="container mx-auto flex justify-between items-center">
-          <p>&copy; 2024 DEGEN Design System</p>
-          <a
-            href="https://triceedesign.eth"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-gray-400"
-          >
-            triceedesign.eth
-          </a>
+export default function Home() {
+  return (
+    <main className="min-h-screen">
+      <Nav />
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="rounded-3xl border-2 border-black p-8 mb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+          <h1 className="text-primary text-4xl font-bold mb-2">Hello,</h1>
+          <p className="text-gray-500 mb-4">Lorem ipsum dolor sit amet, adipiscing elit.</p>
+          <p className="mb-8 max-w-3xl">
+            Helium airweave compound ankr ethereum siacoin waves holo solana.
+            Uniswap revain compound polkadot fantom hedera chiliz stacks audius EOS.
+            Helium airweave compound ankr ethereum siacoin waves holo solana.
+          </p>
+          <button className="px-6 py-3 bg-white border-2 border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">
+            Mint a thing →
+          </button>
         </div>
-      </footer>
-    </div>
-  );
-};
 
-export default LandingPage;
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <PriceCard
+            name="Bitcoin"
+            symbol="BTC"
+            price={51595}
+            change={1.13}
+            data={mockChartData}
+          />
+          <PriceCard
+            name="Bitcoin"
+            symbol="BTC"
+            price={51595}
+            change={1.13}
+            data={mockChartData}
+          />
+          <PriceCard
+            name="Bitcoin"
+            symbol="BTC"
+            price={51595}
+            change={1.13}
+            data={mockChartData}
+          />
+        </div>
+
+        <CryptoTable data={mockTableData} />
+      </div>
+      <footer className="text-center py-8 text-gray-500">
+        DGEN Design System 2024
+      </footer>
+    </main>
+  )
+}
+
