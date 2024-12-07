@@ -8,7 +8,7 @@ from typing import Optional
 import sqlite3
 import uuid
 
-from query_pipelines.default.entrypoint import default_entrypoint
+from query_pipelines.default.entrypoint import entrypoint
 
 app = FastAPI()
 
@@ -48,8 +48,10 @@ async def chat(request: ChatRequest):
 
 def execute_pipeline(pipeline_name, user_query, history):
     
-    if pipeline_name == "default_pipeline":
-        return default_entrypoint(user_query, history)
+    if pipeline_name == "chat":
+        return entrypoint(user_query, history, pipeline_name)
+    elif pipeline_name == "function":
+        return entrypoint(user_query, history, pipeline_name)
     else:
         raise ValueError(f"Invalid pipeline name: {pipeline_name}")
 
