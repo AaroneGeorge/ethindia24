@@ -28,7 +28,7 @@ export async function getCoinData(id: string) {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      'x-cg-pro-api-key': 'CG-1BRiJ1RiM8ThVMczhwoWE4SE'
+      'x-cg-demo-api-key': 'CG-1BRiJ1RiM8ThVMczhwoWE4SE'
     }
   };
 

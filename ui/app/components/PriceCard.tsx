@@ -24,7 +24,7 @@ export function PriceCard({
   return (
     <div
       className="price-card cursor-pointer hover:shadow-lg transition-shadow"
-      onClick={() => router.push(`/memecoin/${id}`)}
+      onClick={() => router.push(`/coin/${id}`)}
     >
       <div className="flex items-start justify-between mb-4">
         <div>
