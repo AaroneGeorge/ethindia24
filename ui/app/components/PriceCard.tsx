@@ -52,7 +52,7 @@ export function PriceCard({
             {change !== null && change !== undefined
               ? `${change.toFixed(2)}%`
               : "N/A"}{" "}
-            7d
+            24h
           </div>
         </div>
       </div>

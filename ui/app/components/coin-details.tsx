@@ -23,7 +23,7 @@ interface CoinDetailsProps {
   }
   
   export function CoinDetails({ coin }: CoinDetailsProps) {
-    console.log('coin market data price',coin.market_data?.current_price.usd)
+    console.log('coin market data price',coin.market_data?.price_change_percentage_24h)
     return (
       <div className="rounded-3xl border-2 border-black p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
         <h1 className="text-3xl font-bold mb-4">{coin.name} ({coin.symbol.toUpperCase()})</h1>
@@ -34,8 +34,8 @@ interface CoinDetailsProps {
           </div>
           <div>
             <p className="text-gray-500">24h Change</p>
-            <p className={`text-2xl font-bold ${coin.price_change_percentage_24h != null && coin.price_change_percentage_24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-            {coin.market_data != null ? coin.market_data?.price_change_percentage_24h.toFixed(2) : 'N/A'}%
+            <p className={`text-2xl font-bold ${coin.market_data?.price_change_percentage_24h != null && coin.market_data?.price_change_percentage_24h >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+            {coin.market_data != null ? coin.market_data?.price_change_percentage_24h : 'N/A'}%
             </p>
           </div>
           <div>

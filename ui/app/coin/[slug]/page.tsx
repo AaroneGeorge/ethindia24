@@ -11,8 +11,20 @@ export default async function CoinPage({
 }: {
   params: { slug: string };
 }) {
-  const coinData = await getCoinData(params.slug);
-  console.log(params.slug, "params.slug");
+  const fetchCoinData = async () => {
+    const coinData = await getCoinData(params.slug);
+    console.log(params.slug, "params.slug");
+    return coinData;
+  };
+
+  const coinData = await fetchCoinData();
+
+  // Set an interval to fetch coin data every 60 seconds
+  setInterval(async () => {
+    console.log('updating data')
+    const updatedCoinData = await fetchCoinData();
+  }, 60000);
+
   if (!coinData) {
     return <div>Coin not found</div>;
   }

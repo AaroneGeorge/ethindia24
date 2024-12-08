@@ -31,10 +31,10 @@ export function Nav() {
 
   return (
     <nav className="flex items-center justify-between p-4 border-b-2 border-black relative">
-      <Link href="/" className="text-primary text-2xl font-bold">
+      <Link href="/landing" className="text-primary text-2xl font-bold">
         MemAi
       </Link>
-      <div className="flex items-center gap-4">
+      {/* <div className="flex items-center gap-4">
         <Link href="/" className="nav-link">
           Home
         </Link>
@@ -47,7 +47,7 @@ export function Nav() {
         <Link href="/treasury" className="nav-link flex items-center gap-1">
           Treasury <ChevronDown className="w-4 h-4" />
         </Link>
-      </div>
+      </div> */}
       <div className="flex items-center gap-2 relative">
         <span className="text-sm">Aarlio Messi</span>
         <img

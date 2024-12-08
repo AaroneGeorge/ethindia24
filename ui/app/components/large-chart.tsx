@@ -12,15 +12,22 @@ export function LargeChart({ coinId }: { coinId: string }) {
   const [chartData, setChartData] = useState<ChartData[]>([])
 
   useEffect(() => {
-    fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=30`)
-      .then(response => response.json())
-      .then(data => {
-        const formattedData = data.prices.map(([timestamp, price]: [number, number]) => ({
-          date: new Date(timestamp).toLocaleDateString(),
-          price: price
-        }))
-        setChartData(formattedData)
-      })
+    const fetchData = () => {
+      fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=30`)
+        .then(response => response.json())
+        .then(data => {
+          const formattedData = data.prices.map(([timestamp, price]: [number, number]) => ({
+            date: new Date(timestamp).toLocaleDateString(),
+            price: price
+          }))
+          setChartData(formattedData)
+        })
+    }
+
+    fetchData() // Initial fetch
+    const intervalId = setInterval(fetchData, 60000); // Fetch data every 60 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on unmount
   }, [coinId])
 
   return (

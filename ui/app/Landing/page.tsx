@@ -65,7 +65,7 @@ export default function Home() {
                 name={coin.name}
                 symbol={coin.symbol}
                 price={coin.current_price}
-                change={coin.price_change_percentage_7d_in_currency}
+                change={coin.price_change_percentage_24h}
                 sparkline={coin.sparkline_in_7d?.price || []}
               />
             ))}

@@ -22,7 +22,7 @@ export function CryptoTable({ initialData }) {
           {initialData.map((coin) => (
             <tr
               key={coin.id}
-              onClick={() => router.push(`/memecoin/${coin.id}`)}
+              onClick={() => router.push(`/coin/${coin.id}`)}
               className="cursor-pointer hover:bg-gray-50"
             >
               <td className="table-cell">{coin.name}</td>
