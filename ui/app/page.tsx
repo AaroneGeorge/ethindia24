@@ -1,53 +1,43 @@
-"use client";
+"use client"
 import React, { useEffect, useMemo } from "react";
 import { useSession, signOut } from "next-auth/react";
-import { LoginButton } from "./components/LoginButton";
 import { useOkto, OktoContextType, BuildType, AuthType } from "okto-sdk-react";
-import GetButton from "./components/GetButton";
-import TransferTokens from "./components/TransferTokens";
 import { useAppContext } from "./components/AppContext";
-import AuthButton from "./components/AuthButton";
-import SendRawTransaction from "./components/SendRawTransaction";
-import { EmailOTPVerification } from "./components/EmailOTPVerification";
-import { PhoneOTPVerification } from "./components/PhoneOTPVerification";
-
-
-declare module "next-auth" {
-  interface Session {
-    id_token?: string; // Added id_token property
-  }
-}
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { Button } from "./components/ui/button";
 
 export default function Home() {
-  
   const { data: session } = useSession();
   const { apiKey, setApiKey, buildType, setBuildType } = useAppContext();
   const {
     isLoggedIn,
     authenticate,
-    authenticateWithUserId,
-    logOut,
-    getPortfolio,
-    transferTokens,
-    getWallets,
     createWallet,
-    getSupportedNetworks,
-    getSupportedTokens,
-    getUserDetails,
-    orderHistory,
-    getNftOrderDetails,
-    showWidgetModal,
+    getWallets,
     showOnboardingModal,
-    getRawTransactionStatus,
-    transferTokensWithJobStatus,
-    transferNft,
-    transferNftWithJobStatus,
-    executeRawTransaction,
-    executeRawTransactionWithJobStatus,
-    setTheme,
-    getTheme,
   } = useOkto() as OktoContextType;
+
   const idToken = useMemo(() => (session ? session.id_token : null), [session]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      console.log("Okto is authenticated");
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    const authenticate = async () => {
+      if (idToken) {
+        await handleAuthenticate();
+        createWallet();
+        getWallets();
+      }
+    };
+
+    authenticate();
+  }, [idToken]);
+
   async function handleAuthenticate(): Promise<any> {
     if (!idToken) {
       return { result: false, error: "No google login" };
@@ -65,66 +55,61 @@ export default function Home() {
     });
   }
 
-  async function handleLogout() {
-    try {
-      logOut();
-      return { result: "logout success" };
-    } catch (error) {
-      return { result: "logout failed" };
+  const handleConnectWallet = () => {
+    if (!isLoggedIn) {
+      showOnboardingModal(AuthType.GAUTH, "MemAi");
     }
-  }
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      console.log("Okto is authenticated");
-    }
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    const authenticate = async () => {
-      if (idToken) {
-        await handleAuthenticate();
-        createWallet();
-      }
-    };
-
-    authenticate();
-  }, [idToken]);
+  };
 
   setApiKey(process.env.NEXT_PUBLIC_OKTO_CLIENT_API);
 
+  const [walletAddress, setWalletAddress] = React.useState("");
+
+  useEffect(() => {
+    const getWalletDetails = async () => {
+      if (isLoggedIn) {
+        try {
+          const response = await getWallets();
+          if (response?.wallets?.[0]) {
+            setWalletAddress(response.wallets[0].address);
+          }
+        } catch (error) {
+          console.error("Error getting wallet:", error);
+        }
+      }
+    };
+    getWalletDetails();
+  }, [isLoggedIn]);
+
   return (
-    <main className="flex min-h-screen flex-col items-center font-pixeloid space-y-6 p-12 bg-violet-200">
-      <div className="text-black font-bold text-3xl mb-8">Okto SDK</div>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-violet-200">
+      <div className="text-center space-y-8 max-w-xl p-6">
+        <Button
+          variant="outline"
+          onClick={handleConnectWallet}
+          className="w-64 border-2 border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] 
+                   hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] 
+                   transition-all bg-white px-6 py-3"
+        >
+          {walletAddress
+            ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`
+            : "Connect Wallet"}
+        </Button>
 
-      {/* status indicator */}
-      <div className="flex items-center gap-2 bg-white rounded-lg px-4 py-2 shadow-sm">
-        <div
-          className={`w-3 h-3 rounded-full ${
-            isLoggedIn ? "bg-green-500" : "bg-red-500"
-          }`}
-        ></div>
-        <span className="text-sm font-medium">
-          Status: {isLoggedIn ? "Logged In" : "Not Logged In"}
-        </span>
-      </div>
+        {isLoggedIn && (
+          <Link
+            href="/landing"
+            className="flex items-center justify-center gap-2 text-primary hover:underline"
+          >
+            Explore MemAi <ArrowRight className="w-4 h-4" />
+          </Link>
+        )}
 
-      <div className="space-y-6 w-full max-w-lg">
-        {/* <div className="space-y-4">
-          <label className="text-black font-semibold font-pixeloid">API Key:</label>
-          <input
-            type="text"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            className="w-full px-4 py-2 rounded bg-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div> */}
-        <div className="space-y-4">
-          <label className="text-black font-semibold">Build Type:</label>
+        <div className="hidden">
           <select
             value={buildType}
             onChange={(e) => setBuildType(e.target.value)}
-            className="w-full px-4 py-2 rounded bg-gray-200 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 rounded bg-gray-200 text-black"
           >
             <option value={BuildType.SANDBOX}>Sandbox</option>
             <option value={BuildType.STAGING}>Staging</option>
@@ -132,65 +117,6 @@ export default function Home() {
           </select>
         </div>
       </div>
-
-      <div className="w-full max-w-lg">
-        <EmailOTPVerification
-          onVerificationSuccess={() => console.log("Verification successful")}
-          onVerificationError={(error) =>
-            console.error("Verification failed:", error)
-          }
-        />
-      </div>
-
-      <div className="w-full max-w-lg">
-        <PhoneOTPVerification
-          onVerificationSuccess={() => console.log("Verification successful")}
-          onVerificationError={(error) =>
-            console.error("Verification failed:", error)
-          }
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 w-full max-w-lg mt-8">
-        <LoginButton />
-
-        <GetButton title="Okto Authenticate [dnc]" apiFn={handleAuthenticate} />
-        <AuthButton authenticateWithUserId={authenticateWithUserId} />
-        <GetButton title="Okto Log out" apiFn={handleLogout} />
-        <GetButton title="getPortfolio" apiFn={getPortfolio} />
-        <GetButton title="getSupportedNetworks" apiFn={getSupportedNetworks} />
-        <GetButton title="getSupportedTokens" apiFn={getSupportedTokens} />
-        <GetButton title="getUserDetails" apiFn={getUserDetails} />
-        <GetButton title="getWallets" apiFn={getWallets} />
-        <GetButton title="createWallet [dnc]" apiFn={createWallet} />
-        <GetButton title="orderHistory" apiFn={() => orderHistory({})} />
-        {/* <GetButton title="getRawTransactionStatus" apiFn={() => getRawTransactionStatus({})} /> */}
-        <GetButton
-          title="getNftOrderDetails"
-          apiFn={() => getNftOrderDetails({})}
-        />
-        <button
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onClick={() => {
-            showWidgetModal();
-          }}
-        >
-          Show Modal
-        </button>
-        <button
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          onClick={() => {
-            showOnboardingModal(AuthType.GAUTH, "Test App");
-          }}
-        >
-          Show Onboarding Modal
-        </button>
-      </div>
-
-      <div className="flex flex-col gap-2 w-full max-w-lg">
-        <TransferTokens apiFn={transferTokens} />
-        <SendRawTransaction apiFn={executeRawTransaction} />
-      </div>
-    </main>
+    </div>
   );
 }
