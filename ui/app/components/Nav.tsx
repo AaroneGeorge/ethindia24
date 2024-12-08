@@ -32,7 +32,7 @@ export function Nav() {
   return (
     <nav className="flex items-center justify-between p-4 border-b-2 border-black relative">
       <Link href="/" className="text-primary text-2xl font-bold">
-        BEGEN
+        MemAi
       </Link>
       <div className="flex items-center gap-4">
         <Link href="/" className="nav-link">

@@ -10,8 +10,8 @@ const inter = Inter({ subsets: ["latin"] });
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Okto React SDK",
-  description: "Okto React SDK",
+  title: "MemAi | the memcoin market place with a twist",
+  description: "MemAi platform",
 };
 
 export default async function RootLayout({

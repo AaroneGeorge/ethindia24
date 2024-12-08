@@ -23,14 +23,14 @@ interface CoinDetailsProps {
   }
   
   export function CoinDetails({ coin }: CoinDetailsProps) {
-    console.log('coin market data price',coin.market_data.price_change_percentage_24h)
+    console.log('coin market data price',coin.market_data?.current_price.usd)
     return (
       <div className="rounded-3xl border-2 border-black p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
         <h1 className="text-3xl font-bold mb-4">{coin.name} ({coin.symbol.toUpperCase()})</h1>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <p className="text-gray-500">Price</p>
-            <p className="text-2xl font-bold">${coin.market_data != null ? coin.market_data?.current_price.usd.toLocaleString() : 'N/A'}</p>
+            <p className="text-2xl font-bold">${coin.market_data != null ? coin.market_data?.current_price.usd : 'N/A'}</p>
           </div>
           <div>
             <p className="text-gray-500">24h Change</p>
