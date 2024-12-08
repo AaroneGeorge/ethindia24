@@ -24,4 +24,24 @@ Open your browser and go to http://localhost:3000 to view the frontend.
 
 ### 2\. Setup the Backend
 
-*   The backend folder is currently blank. Placeholder functionality will be implemented soon.
+1. Navigate to the backend folder:
+```bash
+cd ai-backend
+```
+2. Create and activate a virtual environment:
+```bash
+python3 -m venv venv
+# On Windows:
+.\venv\Scripts\activate
+# On Mac/Linux:
+source venv/bin/activate
+```
+3. Install dependencies:
+```bash
+pip3 install -r requirements.txt
+```
+4. Start the FastAPI server:
+```bash
+uvicorn main:app --reload
+```
+5. The backend will be available at http://127.0.0.1:8000.
